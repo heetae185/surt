@@ -1,16 +1,7 @@
 # surt
 
-A new Flutter project.
+Surrogate Reference Task를 태블릿 PC에 맞게 변형한 버전입니다. 현재 제작중에 있습니다.
 
-## Getting Started
+---
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Mattes, Stefan, and Anders Hallén. "Surrogate distraction measurement techniques: The lane change test." Driver distraction: Theory, effects, and mitigation (2009): 107-121.
