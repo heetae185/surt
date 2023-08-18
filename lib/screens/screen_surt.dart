@@ -22,11 +22,13 @@ class _SurtScreenState extends State<SurtScreen> {
     _circlePositions.clear();
     for (int i = 0; i < _circleNum; i++) {
       final double left = Random().nextDouble() *
-          MediaQuery.of(context).size.width *
-          (1 - _bigCircleWidthRatio);
+              MediaQuery.of(context).size.width *
+              (1 - _bigCircleWidthRatio) +
+          MediaQuery.of(context).size.width * _bigCircleWidthRatio / 2;
       final double top = Random().nextDouble() *
-          MediaQuery.of(context).size.height *
-          (1 - _bigCircleWidthRatio);
+              MediaQuery.of(context).size.height *
+              (1 - _bigCircleWidthRatio) +
+          MediaQuery.of(context).size.height * _bigCircleWidthRatio / 2;
       _circlePositions.add(Offset(left, top));
     }
     print(_circlePositions);
@@ -63,36 +65,61 @@ class _SurtScreenState extends State<SurtScreen> {
   Widget build(BuildContext context) {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
         overlays: [SystemUiOverlay.bottom]);
-    double smallCircleSize =
-        MediaQuery.of(context).size.width * _smallCircleWidthRatio;
-    double bigCircleSize =
-        MediaQuery.of(context).size.width * _bigCircleWidthRatio;
+    double smallCircleRadius =
+        MediaQuery.of(context).size.width * _smallCircleWidthRatio / 2;
+    double bigCircleRadius =
+        MediaQuery.of(context).size.width * _bigCircleWidthRatio / 2;
+    double targetCircleX = _circlePositions[_targetIndex].dx;
+    double targetCircleY = _circlePositions[_targetIndex].dy;
     return Scaffold(
       body: Stack(
         children: [
           for (int i = 0; i < _circleNum; i++)
-            Positioned(
-              left: _circlePositions[i].dx,
-              top: _circlePositions[i].dy,
-              width: i == _targetIndex ? bigCircleSize : smallCircleSize,
-              height: i == _targetIndex ? bigCircleSize : smallCircleSize,
-              child: GestureDetector(
-                onTap: (() => setState(() {
-                      if (i == _targetIndex) {
-                        _generateRandomCircles();
-                      }
-                    })),
-                child: Container(
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.transparent,
-                    border: Border.all(color: Colors.black, width: 2),
-                  ),
-                ),
-              ),
-            )
+            CustomPaint(
+              painter: Circle(_circlePositions[i],
+                  i == _targetIndex ? bigCircleRadius : smallCircleRadius),
+              size: Size(
+                  i == _targetIndex ? bigCircleRadius : smallCircleRadius,
+                  i == _targetIndex ? bigCircleRadius : smallCircleRadius),
+            ),
+          GestureDetector(
+            onTapDown: (detail) {
+              double touchX = detail.localPosition.dx;
+              double touchY = detail.localPosition.dy;
+              if ((touchX > targetCircleX - bigCircleRadius &&
+                  touchX < targetCircleX + bigCircleRadius &&
+                  touchY > targetCircleY - bigCircleRadius &&
+                  touchY < targetCircleY + bigCircleRadius)) {
+                setState(() {
+                  _generateRandomCircles();
+                });
+              }
+            },
+          ),
         ],
       ),
     );
+  }
+}
+
+class Circle extends CustomPainter {
+  final Offset center;
+  final double radius;
+  final Paint _paint;
+
+  Circle(this.center, this.radius)
+      : _paint = Paint()
+          ..color = Colors.black
+          ..strokeWidth = 2.0
+          ..style = PaintingStyle.stroke;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    canvas.drawCircle(center, radius, _paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return false;
   }
 }
