@@ -12,24 +12,46 @@ class SurtScreen extends StatefulWidget {
 class _SurtScreenState extends State<SurtScreen> {
   final List<Offset> _circlePositions = [];
   int _targetIndex = -1;
-  final int _circleNum = 10;
+  final int _circleNum = 4;
   final double _smallCircleWidthRatio = 0.04;
   final double _bigCircleWidthRatio = 0.05;
 
   void _generateRandomCircles() {
     print(MediaQuery.of(context).size.width);
     print(MediaQuery.of(context).size.height);
+
     _circlePositions.clear();
     for (int i = 0; i < _circleNum; i++) {
-      final double left = Random().nextDouble() *
-              MediaQuery.of(context).size.width *
-              (1 - _bigCircleWidthRatio) +
-          MediaQuery.of(context).size.width * _bigCircleWidthRatio / 2;
-      final double top = Random().nextDouble() *
-              MediaQuery.of(context).size.height *
-              (1 - _bigCircleWidthRatio) +
-          MediaQuery.of(context).size.height * _bigCircleWidthRatio / 2;
-      _circlePositions.add(Offset(left, top));
+      int try_ = 0;
+      print("i : ${i} Try : ${try_}");
+      while (true) {
+        try_ += 1;
+        print("i : ${i} Try : ${try_}");
+        bool overlapping = false;
+        final double x = Random().nextDouble() *
+                MediaQuery.of(context).size.width *
+                (1 - _bigCircleWidthRatio) +
+            MediaQuery.of(context).size.width * _bigCircleWidthRatio / 2;
+        final double y = Random().nextDouble() *
+                MediaQuery.of(context).size.height *
+                (1 - _bigCircleWidthRatio) +
+            MediaQuery.of(context).size.height * _bigCircleWidthRatio / 2;
+        for (int j = 0; j < _circlePositions.length; j++) {
+          double distance = sqrt(
+            pow(x - _circlePositions[j].dx, 2) +
+                pow(y - _circlePositions[j].dy, 2),
+          );
+          if (distance <
+              MediaQuery.of(context).size.width * _bigCircleWidthRatio) {
+            overlapping = true;
+            break;
+          }
+        }
+        if (!overlapping) {
+          _circlePositions.add(Offset(x, y));
+          break;
+        }
+      }
     }
     print(_circlePositions);
     _targetIndex = Random().nextInt(_circleNum);
@@ -86,6 +108,8 @@ class _SurtScreenState extends State<SurtScreen> {
             onTapDown: (detail) {
               double touchX = detail.localPosition.dx;
               double touchY = detail.localPosition.dy;
+              print("${touchX} / ${targetCircleX}");
+              print("${touchY} / ${targetCircleY}");
               if ((touchX > targetCircleX - bigCircleRadius &&
                   touchX < targetCircleX + bigCircleRadius &&
                   touchY > targetCircleY - bigCircleRadius &&
