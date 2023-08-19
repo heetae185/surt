@@ -101,23 +101,12 @@ class _SurtScreenState extends State<SurtScreen> {
               size: Size(
                   i == _targetIndex ? bigCircleRadius : smallCircleRadius,
                   i == _targetIndex ? bigCircleRadius : smallCircleRadius),
-            ),
-          GestureDetector(
-            onTapDown: (detail) {
-              double touchX = detail.localPosition.dx;
-              double touchY = detail.localPosition.dy;
-              print("${touchX} / ${targetCircleX}");
-              print("${touchY} / ${targetCircleY}");
-              if ((touchX > targetCircleX - bigCircleRadius &&
-                  touchX < targetCircleX + bigCircleRadius &&
-                  touchY > targetCircleY - bigCircleRadius &&
-                  touchY < targetCircleY + bigCircleRadius)) {
-                setState(() {
+              child: GestureDetector(
+                onTap: () => setState(() {
                   _generateRandomCircles();
-                });
-              }
-            },
-          ),
+                }),
+              ),
+            ),
         ],
       ),
     );
