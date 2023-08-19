@@ -1,6 +1,8 @@
 import 'dart:math';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:surt/provider/participants.dart';
 
 class SurtScreen extends StatefulWidget {
   const SurtScreen({super.key});
@@ -10,6 +12,7 @@ class SurtScreen extends StatefulWidget {
 }
 
 class _SurtScreenState extends State<SurtScreen> {
+  late Participants _participants;
   final List<Offset> _circlePositions = [];
   int _targetIndex = -1;
   final int _circleNum = 50;
@@ -83,6 +86,7 @@ class _SurtScreenState extends State<SurtScreen> {
   Widget build(BuildContext context) {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
         overlays: [SystemUiOverlay.bottom]);
+    _participants = Provider.of<Participants>(context);
     double smallCircleRadius =
         MediaQuery.of(context).size.width * _smallCircleSizeRatio / 2;
     double bigCircleRadius =
@@ -105,6 +109,7 @@ class _SurtScreenState extends State<SurtScreen> {
               child: GestureDetector(
                 onTap: () => setState(() {
                   _generateRandomCircles();
+                  _participants.addCount();
                 }),
               ),
             ),
