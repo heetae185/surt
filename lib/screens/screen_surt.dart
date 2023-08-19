@@ -12,9 +12,9 @@ class SurtScreen extends StatefulWidget {
 class _SurtScreenState extends State<SurtScreen> {
   final List<Offset> _circlePositions = [];
   int _targetIndex = -1;
-  final int _circleNum = 40;
-  final double _smallCircleWidthRatio = 0.04;
-  final double _bigCircleWidthRatio = 0.05;
+  final int _circleNum = 50;
+  final double _smallCircleSizeRatio = 0.03;
+  final double _bigCircleSizeRatio = 0.04;
 
   void _generateRandomCircles() {
     print(MediaQuery.of(context).size.width);
@@ -26,19 +26,19 @@ class _SurtScreenState extends State<SurtScreen> {
         bool overlapping = false;
         final double x = Random().nextDouble() *
                 MediaQuery.of(context).size.width *
-                (1 - _bigCircleWidthRatio) +
-            MediaQuery.of(context).size.width * _bigCircleWidthRatio / 2;
+                (1 - _bigCircleSizeRatio) +
+            MediaQuery.of(context).size.width * _bigCircleSizeRatio / 2;
         final double y = Random().nextDouble() *
                 MediaQuery.of(context).size.height *
-                (1 - _bigCircleWidthRatio) +
-            MediaQuery.of(context).size.height * _bigCircleWidthRatio / 2;
+                (1 - _bigCircleSizeRatio) +
+            MediaQuery.of(context).size.height * _bigCircleSizeRatio / 2;
         for (int j = 0; j < _circlePositions.length; j++) {
           double distance = sqrt(
             pow(x - _circlePositions[j].dx, 2) +
                 pow(y - _circlePositions[j].dy, 2),
           );
           if (distance <
-              MediaQuery.of(context).size.width * _bigCircleWidthRatio) {
+              MediaQuery.of(context).size.width * _bigCircleSizeRatio) {
             overlapping = true;
             break;
           }
@@ -84,12 +84,13 @@ class _SurtScreenState extends State<SurtScreen> {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
         overlays: [SystemUiOverlay.bottom]);
     double smallCircleRadius =
-        MediaQuery.of(context).size.width * _smallCircleWidthRatio / 2;
+        MediaQuery.of(context).size.width * _smallCircleSizeRatio / 2;
     double bigCircleRadius =
-        MediaQuery.of(context).size.width * _bigCircleWidthRatio / 2;
+        MediaQuery.of(context).size.width * _bigCircleSizeRatio / 2;
     double targetCircleX = _circlePositions[_targetIndex].dx;
     double targetCircleY = _circlePositions[_targetIndex].dy;
     return Scaffold(
+      backgroundColor: Colors.black,
       body: Stack(
         children: [
           for (int i = 0; i < _circleNum; i++)
@@ -121,7 +122,7 @@ class Circle extends CustomPainter {
 
   Circle(this.center, this.radius, this._targetIndex)
       : _paint = Paint()
-          ..color = Colors.black
+          ..color = Colors.white
           ..strokeWidth = 2.0
           ..style = PaintingStyle.stroke;
 
