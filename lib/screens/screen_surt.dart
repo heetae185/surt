@@ -12,7 +12,7 @@ class SurtScreen extends StatefulWidget {
 class _SurtScreenState extends State<SurtScreen> {
   final List<Offset> _circlePositions = [];
   int _targetIndex = -1;
-  final int _circleNum = 4;
+  final int _circleNum = 40;
   final double _smallCircleWidthRatio = 0.04;
   final double _bigCircleWidthRatio = 0.05;
 
@@ -22,11 +22,7 @@ class _SurtScreenState extends State<SurtScreen> {
 
     _circlePositions.clear();
     for (int i = 0; i < _circleNum; i++) {
-      int try_ = 0;
-      print("i : ${i} Try : ${try_}");
       while (true) {
-        try_ += 1;
-        print("i : ${i} Try : ${try_}");
         bool overlapping = false;
         final double x = Random().nextDouble() *
                 MediaQuery.of(context).size.width *
@@ -98,8 +94,10 @@ class _SurtScreenState extends State<SurtScreen> {
         children: [
           for (int i = 0; i < _circleNum; i++)
             CustomPaint(
-              painter: Circle(_circlePositions[i],
-                  i == _targetIndex ? bigCircleRadius : smallCircleRadius),
+              painter: Circle(
+                  _circlePositions[i],
+                  i == _targetIndex ? bigCircleRadius : smallCircleRadius,
+                  _targetIndex),
               size: Size(
                   i == _targetIndex ? bigCircleRadius : smallCircleRadius,
                   i == _targetIndex ? bigCircleRadius : smallCircleRadius),
@@ -130,8 +128,9 @@ class Circle extends CustomPainter {
   final Offset center;
   final double radius;
   final Paint _paint;
+  final int _targetIndex;
 
-  Circle(this.center, this.radius)
+  Circle(this.center, this.radius, this._targetIndex)
       : _paint = Paint()
           ..color = Colors.black
           ..strokeWidth = 2.0
@@ -144,6 +143,6 @@ class Circle extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return false;
+    return _targetIndex == (oldDelegate as Circle)._targetIndex;
   }
 }
