@@ -129,6 +129,7 @@ class _MainScreenState extends State<MainScreen> {
     return ElevatedButton(
       onPressed: (() {
         if (formKey.currentState!.validate()) {
+          _participants.setId();
           formKey.currentState!.save();
           Navigator.pushNamed(context, '/loading');
         }

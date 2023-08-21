@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:surt/provider/participants.dart';
 
@@ -147,7 +148,31 @@ class _SurtScreenState extends State<SurtScreen> {
                 children: [
                   GestureDetector(
                     onLongPress: () {
-                      print('long press');
+                      showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              content: const Text("저장하시겠습니까?"),
+                              actions: [
+                                ElevatedButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                      Navigator.pushNamed(context, '/');
+                                    },
+                                    child: const Text("네")),
+                                ElevatedButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: Colors.white,
+                                      foregroundColor: Colors.black,
+                                    ),
+                                    child: const Text("아니오"))
+                              ],
+                            );
+                          });
                     },
                     child: Container(
                       width: statusColumnWidth * 0.8,
