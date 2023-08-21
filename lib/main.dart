@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:surt/provider/participants.dart';
+import 'package:surt/screens/screen_database.dart';
 import 'package:surt/screens/screen_loading.dart';
 import 'package:surt/screens/screen_main.dart';
 import 'package:surt/screens/screen_surt.dart';
@@ -21,7 +22,8 @@ class SuRT extends StatelessWidget {
         routes: {
           '/': (context) => const MainScreen(),
           '/loading': (context) => const LoadingScreen(),
-          '/surt': (context) => const SurtScreen()
+          '/surt': (context) => const SurtScreen(),
+          '/database': (context) => const DatabaseScreen(),
         },
       ),
     );

@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,10 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     MediaQueryData mediaQuery = MediaQuery.of(context);
     _participants = Provider.of<Participants>(context);
     return Scaffold(
@@ -120,6 +125,17 @@ class _MainScreenState extends State<MainScreen> {
                       ]),
                 ),
               ),
+              Expanded(
+                child: Container(
+                  alignment: Alignment.center,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/database');
+                    },
+                    child: const Text("Database"),
+                  ),
+                ),
+              )
             ],
           ),
         ));
