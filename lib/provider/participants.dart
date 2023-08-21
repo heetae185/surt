@@ -44,6 +44,15 @@ class Participants extends ChangeNotifier {
     notifyListeners();
   }
 
+  void resetState() {
+    id = "";
+    name = "";
+    bornYear = 1990;
+    drivingExperience = 0;
+    count = 0;
+    notifyListeners();
+  }
+
   Map<String, dynamic> toMap() {
     return {
       'id': id,

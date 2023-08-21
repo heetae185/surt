@@ -155,7 +155,7 @@ class _SurtScreenState extends State<SurtScreen> {
                               actions: [
                                 ElevatedButton(
                                     onPressed: () {
-                                      Navigator.pop(context);
+                                      _participants.resetState();
                                       Navigator.pushNamed(context, '/');
                                     },
                                     child: const Text("네")),
