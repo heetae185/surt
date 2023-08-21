@@ -16,11 +16,22 @@ class _MainScreenState extends State<MainScreen> {
   late Participants _participants;
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
+  }
+
+  @override
+  void dispose() {
+    SystemChrome.setPreferredOrientations(DeviceOrientation.values);
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     MediaQueryData mediaQuery = MediaQuery.of(context);
     _participants = Provider.of<Participants>(context);
     return Scaffold(

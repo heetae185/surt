@@ -64,7 +64,6 @@ class _SurtScreenState extends State<SurtScreen> {
   @override
   void initState() {
     super.initState();
-
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.landscapeLeft,
       DeviceOrientation.landscapeRight,
