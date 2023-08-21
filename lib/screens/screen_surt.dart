@@ -16,6 +16,7 @@ class _SurtScreenState extends State<SurtScreen> {
   final List<Offset> _circlePositions = [];
   int _targetIndex = -1;
   final int _circleNum = 50;
+  final double _statusColumnRatio = 0.05;
   final double _smallCircleSizeRatio = 0.03;
   final double _bigCircleSizeRatio = 0.04;
 
@@ -27,14 +28,17 @@ class _SurtScreenState extends State<SurtScreen> {
     for (int i = 0; i < _circleNum; i++) {
       while (true) {
         bool overlapping = false;
+
+        // x, y cordinates for the center of circles are randomly selected ((0 + circle radius) ~ (MediaQuery size - circle radius))
         final double x = Random().nextDouble() *
                 MediaQuery.of(context).size.width *
-                (1 - _bigCircleSizeRatio) +
+                (1 - (_bigCircleSizeRatio + _statusColumnRatio)) +
             MediaQuery.of(context).size.width * _bigCircleSizeRatio / 2;
         final double y = Random().nextDouble() *
                 MediaQuery.of(context).size.height *
                 (1 - _bigCircleSizeRatio) +
             MediaQuery.of(context).size.height * _bigCircleSizeRatio / 2;
+
         for (int j = 0; j < _circlePositions.length; j++) {
           double distance = sqrt(
             pow(x - _circlePositions[j].dx, 2) +
@@ -87,6 +91,8 @@ class _SurtScreenState extends State<SurtScreen> {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
         overlays: [SystemUiOverlay.bottom]);
     _participants = Provider.of<Participants>(context);
+    double statusColumnWidth =
+        MediaQuery.of(context).size.width * _statusColumnRatio;
     double smallCircleRadius =
         MediaQuery.of(context).size.width * _smallCircleSizeRatio / 2;
     double bigCircleRadius =
@@ -95,34 +101,76 @@ class _SurtScreenState extends State<SurtScreen> {
     double targetCircleY = _circlePositions[_targetIndex].dy;
     return Scaffold(
       backgroundColor: Colors.black,
-      body: Stack(
+      body: Row(
         children: [
-          for (int i = 0; i < _circleNum; i++)
-            CustomPaint(
-              painter: Circle(
-                  _circlePositions[i],
-                  i == _targetIndex ? bigCircleRadius : smallCircleRadius,
-                  _targetIndex),
-              size: Size(
-                  i == _targetIndex ? bigCircleRadius : smallCircleRadius,
-                  i == _targetIndex ? bigCircleRadius : smallCircleRadius),
+          SizedBox(
+            width: MediaQuery.of(context).size.width * (1 - _statusColumnRatio),
+            child: Stack(
+              children: [
+                for (int i = 0; i < _circleNum; i++)
+                  CustomPaint(
+                    painter: Circle(
+                        _circlePositions[i],
+                        i == _targetIndex ? bigCircleRadius : smallCircleRadius,
+                        _targetIndex),
+                    size: Size(
+                        i == _targetIndex ? bigCircleRadius : smallCircleRadius,
+                        i == _targetIndex
+                            ? bigCircleRadius
+                            : smallCircleRadius),
+                  ),
+                GestureDetector(
+                  onTapDown: (detail) {
+                    double touchX = detail.localPosition.dx;
+                    double touchY = detail.localPosition.dy;
+                    print("${touchX} / ${targetCircleX}");
+                    print("${touchY} / ${targetCircleY}");
+                    if ((touchX > targetCircleX - bigCircleRadius &&
+                        touchX < targetCircleX + bigCircleRadius &&
+                        touchY > targetCircleY - bigCircleRadius &&
+                        touchY < targetCircleY + bigCircleRadius)) {
+                      _participants.addCount();
+                      setState(() {
+                        _generateRandomCircles();
+                      });
+                    }
+                  },
+                ),
+              ],
             ),
-          GestureDetector(
-            onTapDown: (detail) {
-              double touchX = detail.localPosition.dx;
-              double touchY = detail.localPosition.dy;
-              print("${touchX} / ${targetCircleX}");
-              print("${touchY} / ${targetCircleY}");
-              if ((touchX > targetCircleX - bigCircleRadius &&
-                  touchX < targetCircleX + bigCircleRadius &&
-                  touchY > targetCircleY - bigCircleRadius &&
-                  touchY < targetCircleY + bigCircleRadius)) {
-                setState(() {
-                  _generateRandomCircles();
-                });
-              }
-            },
           ),
+          SizedBox(
+            width: statusColumnWidth,
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  GestureDetector(
+                    onLongPress: () {
+                      print('long press');
+                    },
+                    child: Container(
+                      width: statusColumnWidth * 0.8,
+                      height: statusColumnWidth * 0.5,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.white, width: 2),
+                        color: Colors.transparent,
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      alignment: Alignment.bottomCenter,
+                      child: const Text(
+                        "Save",
+                        style: TextStyle(color: Colors.white, fontSize: 10),
+                      ),
+                    ),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
+                  )
+                ],
+              ),
+            ),
+          )
         ],
       ),
     );
