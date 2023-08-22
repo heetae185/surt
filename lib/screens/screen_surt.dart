@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:surt/database/database.dart';
 import 'package:surt/provider/participants.dart';
+import 'package:surt/widget/circle.dart';
 
 class SurtScreen extends StatefulWidget {
   const SurtScreen({super.key});
@@ -204,28 +205,5 @@ class _SurtScreenState extends State<SurtScreen> {
         ],
       ),
     );
-  }
-}
-
-class Circle extends CustomPainter {
-  final Offset center;
-  final double radius;
-  final Paint _paint;
-  final int _targetIndex;
-
-  Circle(this.center, this.radius, this._targetIndex)
-      : _paint = Paint()
-          ..color = Colors.white
-          ..strokeWidth = 2.0
-          ..style = PaintingStyle.stroke;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    canvas.drawCircle(center, radius, _paint);
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return _targetIndex == (oldDelegate as Circle)._targetIndex;
   }
 }
