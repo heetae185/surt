@@ -148,6 +148,10 @@ class _SurtScreenState extends State<SurtScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
+                  Text(
+                    _participants.count.toString(),
+                    style: const TextStyle(fontSize: 10, color: Colors.white),
+                  ),
                   GestureDetector(
                     onLongPress: () {
                       showDialog(
