@@ -40,6 +40,15 @@ class DBHelper {
     );
   }
 
+  Future<void> delete(String id) async {
+    final db = await _openDb();
+    await db.delete(
+      'surt',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+
   Future<List<Participants>> getAllParticipants() async {
     List<Participants> participantsList = [];
     final db = await _openDb();

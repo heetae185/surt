@@ -37,7 +37,40 @@ class _DatabaseScreenState extends State<DatabaseScreen> {
           return ListTile(
             title: Text(participant.name ?? ''),
             subtitle: Text(
-                "Born Year: ${participant.bornYear}, Driving Experience: ${participant.drivingExperience} years"),
+                "Born in ${participant.bornYear}, Driving Experience: ${participant.drivingExperience} years, Count: ${participant.count}"),
+            trailing: GestureDetector(
+              onTap: (() async {
+                showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        content: const Text("삭제하시겠습니까?"),
+                        actions: [
+                          ElevatedButton(
+                              onPressed: () async {
+                                await _dbHelper.delete(participant.id);
+                                setState(() {
+                                  _loadParticipantsFromDatabase();
+                                });
+                                Navigator.pop(context);
+                              },
+                              child: const Text("네")),
+                          ElevatedButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.white,
+                                foregroundColor: Colors.black,
+                              ),
+                              child: const Text("아니오"))
+                        ],
+                      );
+                    });
+              }),
+              child: const Icon(Icons.delete),
+            ),
           );
         }),
         separatorBuilder: (context, index) {
