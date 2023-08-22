@@ -39,4 +39,14 @@ class DBHelper {
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
+
+  Future<List<Participants>> getAllParticipants() async {
+    List<Participants> participantsList = [];
+    final db = await _openDb();
+    final List<Map<String, dynamic>> maps = await db.query('surt');
+    for (var map in maps) {
+      participantsList.add(Participants.fromMap(map));
+    }
+    return participantsList;
+  }
 }

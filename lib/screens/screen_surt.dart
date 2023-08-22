@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:surt/database/database.dart';
 import 'package:surt/provider/participants.dart';
 
 class SurtScreen extends StatefulWidget {
@@ -13,6 +14,7 @@ class SurtScreen extends StatefulWidget {
 
 class _SurtScreenState extends State<SurtScreen> {
   late Participants _participants;
+  final DBHelper _dbHelper = DBHelper();
   final List<Offset> _circlePositions = [];
   int _targetIndex = -1;
   final int _circleNum = 50;
@@ -21,8 +23,8 @@ class _SurtScreenState extends State<SurtScreen> {
   final double _bigCircleSizeRatio = 0.04;
 
   void _generateRandomCircles() {
-    print(MediaQuery.of(context).size.width);
-    print(MediaQuery.of(context).size.height);
+    // print(MediaQuery.of(context).size.width);
+    // print(MediaQuery.of(context).size.height);
 
     _circlePositions.clear();
     for (int i = 0; i < _circleNum; i++) {
@@ -56,9 +58,9 @@ class _SurtScreenState extends State<SurtScreen> {
         }
       }
     }
-    print(_circlePositions);
+    // print(_circlePositions);
     _targetIndex = Random().nextInt(_circleNum);
-    print(_targetIndex);
+    // print(_targetIndex);
   }
 
   @override
@@ -124,6 +126,7 @@ class _SurtScreenState extends State<SurtScreen> {
                     double touchY = detail.localPosition.dy;
                     print("${touchX} / ${targetCircleX}");
                     print("${touchY} / ${targetCircleY}");
+                    print("${_participants.name} : ${_participants.count}");
                     if ((touchX > targetCircleX - bigCircleRadius &&
                         touchX < targetCircleX + bigCircleRadius &&
                         touchY > targetCircleY - bigCircleRadius &&
@@ -155,8 +158,12 @@ class _SurtScreenState extends State<SurtScreen> {
                               actions: [
                                 ElevatedButton(
                                     onPressed: () {
-                                      _participants.resetState();
-                                      Navigator.pushNamed(context, '/');
+                                      _dbHelper
+                                          .insert(_participants)
+                                          .then(((value) {
+                                        _participants.resetState();
+                                        Navigator.pushNamed(context, '/');
+                                      }));
                                     },
                                     child: const Text("네")),
                                 ElevatedButton(
