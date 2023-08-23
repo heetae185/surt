@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:surt/database/database.dart';
 import 'package:surt/provider/participants.dart';
+import 'package:surt/widget/widget_download_csv.dart';
 
 class DatabaseScreen extends StatefulWidget {
   const DatabaseScreen({super.key});
@@ -29,7 +30,12 @@ class _DatabaseScreenState extends State<DatabaseScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('SuRT Demo')),
+      appBar: AppBar(
+        title: const Text('SuRT Demo'),
+        actions: [
+          DownloadCSVButton(),
+        ],
+      ),
       body: ListView.separated(
         itemCount: _participantsList.length,
         itemBuilder: ((context, index) {

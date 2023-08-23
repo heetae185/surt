@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:surt/database/database.dart';
 import 'package:surt/provider/participants.dart';
-import 'package:surt/widget/circle.dart';
+import 'package:surt/widget/widget_circle.dart';
 
 class SurtScreen extends StatefulWidget {
   const SurtScreen({super.key});
