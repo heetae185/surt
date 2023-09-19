@@ -1,6 +1,6 @@
 # surt
 
-Surrogate Reference Task를 태블릿 PC에 맞게 변형한 버전입니다. 현재 제작중에 있습니다. <br>
+Surrogate Reference Task를 태블릿 PC에 맞게 변형한 버전입니다. <br>
 
 원활한 실험 진행을 위해 SuRT 화면 외에도 프로필 입력 화면, SuRT 수행 횟수 기록 기능 등을 추가하였습니다.
 
