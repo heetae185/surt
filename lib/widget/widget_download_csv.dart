@@ -31,7 +31,6 @@ class DownloadCSVButton extends StatelessWidget {
 
     if (externalPath != null) {
       final file = File('$externalPath/participants.csv');
-      print(externalPath);
       await file.writeAsString(csvData);
       Fluttertoast.showToast(
           msg: '다운로드 완료!',
